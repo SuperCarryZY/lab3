@@ -2,7 +2,7 @@
 
 from collections import defaultdict
 
-
+##Yan Zhu
 #### PART ONE ###
 
 def run_map_reduce(map_f, reduce_f, docs):
