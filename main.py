@@ -18,7 +18,7 @@ def run_map_reduce(map_f, reduce_f, docs):
     # 1. call map_f on each element of docs and flatten the results
     # e.g., [('i', 1), ('am', 1), ('sam', 1), ('i', 1), ('am', 1), ('sam', 1), ('is', 1), ('ham', 1)]
     pairs = flatten(list(map(map_f, docs)))
-    # 2. group all pairs by their key
+    # 2. group all pairs by their key	
     # e.g., [('am', [1, 1]), ('ham', [1]), ('i', [1, 1]), ('is', [1]), ('sam', [1, 1])]
     groups = collect(pairs)
     # 3. reduce each group to the final answer
@@ -44,6 +44,22 @@ def test_word_count_map():
     assert word_count_map('i am sam i am') == \
            [('i', 1), ('am', 1), ('sam', 1), ('i', 1), ('am', 1)]
 
+test_word_count_map()
+
+def plus(x, y):
+    # done. do not change me.
+    return x + y
+
+def reduce(f, id_, a):
+    # done. do not change me.
+    if len(a) == 0:
+        return id_
+    elif len(a) == 1:
+        return a[0]
+    else:
+        return f(reduce(f, id_, a[:len(a)//2]),
+                 reduce(f, id_, a[len(a)//2:]))
+
 def word_count_reduce(group):
     """
     Params:
@@ -62,10 +78,6 @@ def word_count_reduce(group):
     
 def test_word_count_reduce():
     assert word_count_reduce(['i', [1,1,1]]) == ('i', 3)
-
-def test_word_count():
-    assert run_map_reduce(word_count_map, word_count_reduce, ['i am sam i am', 'sam is ham']) == \
-           [('am', 2), ('ham', 1), ('i', 2), ('is', 1), ('sam', 2)]
 
 def iterate(f, x, a):
     # done. do not change me.
@@ -98,19 +110,15 @@ def collect(pairs):
     return list(result.items())
 
 
-def plus(x, y):
-    # done. do not change me.
-    return x + y
+test_word_count_reduce()
 
-def reduce(f, id_, a):
-    # done. do not change me.
-    if len(a) == 0:
-        return id_
-    elif len(a) == 1:
-        return a[0]
-    else:
-        return f(reduce(f, id_, a[:len(a)//2]),
-                 reduce(f, id_, a[len(a)//2:]))
+def test_word_count():
+    assert run_map_reduce(word_count_map, word_count_reduce, ['i am sam i am', 'sam is ham']) == \
+           [('am', 2), ('ham', 1), ('i', 2), ('is', 1), ('sam', 2)]
+test_word_count()
+
+
+
     
     
     
@@ -143,7 +151,7 @@ def sentiment_map(doc,
 
 def test_sentiment_map():
     assert sentiment_map('it was a terrible waste of time') == [('negative', 1), ('negative', 1)]
-
+test_sentiment_map()
     
 def test_sentiment():
     docs = [
@@ -154,3 +162,4 @@ def test_sentiment():
     result = run_map_reduce(sentiment_map, word_count_reduce, docs)
     assert result == [('negative', 3), ('positive', 3)]
 
+test_sentiment()
