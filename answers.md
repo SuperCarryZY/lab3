@@ -1,7 +1,7 @@
 # CMPS 6610  Lab 03
 
 **Name (Team Member 1):**________Yan Zhu_________________  
-**Name (Team Member 2):**_________________________
+**Name (Team Member 2):**________Yongbo Chen_________________
 
 
 In this lab you will practice using the `map` and `reduce` functions. These functions are commonly used together in a `map-reduce` framework, used by Google and others to parallelize and scale common computations.
@@ -49,7 +49,7 @@ Span
 
 In a parallel reduce operation, each step halves the remaining elements. For example, in the first step, the n elements are reduced to n/2 elements, then in the second step, those are reduced to n/4, and this process continues until only one element remains. The number of steps required to reduce the elements is logarithmic.
 
-Thus, the span is  O(\log n) .
+Thus, the span is  $O(log n)$.
 
 5. Why are we going through all this trouble? Couldn't I just use this function to count words?
 
@@ -66,11 +66,11 @@ What is the problem that prevents us from easily parallelizing this solution?
 
 **Enter answer here**
 
-Of course, we can directly use this function to count words, and its advantage is that it’s very simple and doesn’t require a lot of code. However, when processing a large number of files, it will consume a lot of time. This means it can only handle small-scale computations, and it has no advantage for parallel computing.
+The problem of above function is it can only handle small-scale computations, and it has no advantage for parallel computing. In terms of processing a large number of files, it will consume a lot of time, which is inefficient.
 
-The issue arises with the counts dictionary, which is used to store all the counts. In a parallel environment, it will cause problems if multiple processes access it simultaneously, potentially leading to errors. In such cases, locking would be required. However, locking means that only one thread can update the count at a time, which defeats the purpose of parallelization.
+Besides, another issue arises with the counts' dictionary, which is used to store all the counts. In a parallel environment, it will cause problems if multiple processes access it simultaneously, potentially leading to errors. In such cases, locking would be required. However, locking means that only one thread can update the count at a time, which defeats the purpose of parallelization.
 
-Additionally, the for doc in docs loop causes files to be processed sequentially, which prevents parallel execution. Effective parallelization requires breaking the problem into independent small tasks that can be executed concurrently without interfering with each other. But in this for loop, the tasks are tightly coupled to the shared counts dictionary, severely impacting parallelization performance.
+Additionally, the for doc in docs loop causes files to be processed sequentially, which prevents parallel execution. Effective parallelization requires breaking the problem into independent small tasks that can be executed concurrently without interfering with each other. But in this for loop, the tasks are tightly coupled to the shared counts' dictionary, severely impacting parallelization performance.
 
 ## Part 2: Sentiment analysis
 
